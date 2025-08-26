@@ -2,11 +2,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";           // ✅ 추가
-import { store } from "./redux/redux";           // ✅ Redux store import
+import { Provider } from "react-redux";
+import { store } from "./redux/redux";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>                       {/* Provider로 감싸기 */}
+  <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>

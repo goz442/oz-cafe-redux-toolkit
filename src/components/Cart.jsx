@@ -1,27 +1,28 @@
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart } from "../redux/redux";
 import data from "../assets/data";
 
-function Cart({ menu, cart, setCart }) {
-  if (!menu)
-    return (
-      <div style={{ textAlign: "center", margin: "80px" }}>
-        {" "}
-        메뉴 정보가 없어요!
-      </div>
-    );
+function Cart() {
+  const menu = useSelector((state) => state.menu);
+  const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  if (!menu) return <div style={{ textAlign: "center", margin: "80px" }}>메뉴 정보가 없어요!</div>;
+
   const allMenus = [...menu.커피, ...menu.논커피];
+
   return (
     <>
       <h2>장바구니</h2>
       <ul className="cart">
-        {cart?.length ? (
-          cart.map((el) => (
+        {cart.length ? (
+          cart.map((el, idx) => (
             <CartItem
-              key={el.id}
+              key={idx}
               item={allMenus.find((menu) => menu.id === el.id)}
               options={el.options}
               quantity={el.quantity}
-              cart={cart}
-              setCart={setCart}
+              removeItem={() => dispatch(removeFromCart(el.id))}
             />
           ))
         ) : (
@@ -32,7 +33,7 @@ function Cart({ menu, cart, setCart }) {
   );
 }
 
-function CartItem({ item, options, quantity, cart, setCart }) {
+function CartItem({ item, options, quantity, removeItem }) {
   return (
     <li className="cart-item">
       <div className="cart-item-info">
@@ -41,21 +42,15 @@ function CartItem({ item, options, quantity, cart, setCart }) {
       </div>
       <div className="cart-item-option">
         {Object.keys(options).map((el) => (
-          <div key={el.id}>
+          <div key={el}>
             {el} : {data.options[el][options[el]]}
           </div>
         ))}
         <div>개수 : {quantity}</div>
       </div>
-      <button
-        className="cart-item-delete"
-        onClick={() => {
-          setCart(cart.filter((el) => item.id !== el.id));
-        }}
-      >
-        삭제
-      </button>
+      <button className="cart-item-delete" onClick={removeItem}>삭제</button>
     </li>
   );
 }
+
 export default Cart;
